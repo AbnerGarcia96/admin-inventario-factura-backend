@@ -1,28 +1,27 @@
-// Import required modules
 const express = require("express");
 const cors = require("cors");
 const { connectDB } = require("./config/db");
 const dotenv = require("dotenv");
 const rutasFacturas = require("./facturas/facturas.routes");
 
-// Load environment variables from .env file
+// Carga las variables de entorno del archivo .env (no está en el repositorio por seguridad)
 dotenv.config();
 
-// Create an instance of an Express app
+// Crea la instancia de Express para manejar las rutas del API
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middleware para realizar validaciones y configurar los CORS
 app.use(cors()); // Enable CORS
 app.use(express.json()); // Parse JSON request bodies
 
-// Connects to CosmosDB
+// Crea la instancia de la conexión con CosmosDB de Azure
 connectDB();
 
-// Basic route
+// Rutas base
 app.use("/facturas", rutasFacturas);
 
-// Start the server
+// Inicialización del servidor
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

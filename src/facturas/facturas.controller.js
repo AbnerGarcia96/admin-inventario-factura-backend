@@ -1,5 +1,6 @@
 const facturasService = require("./facturas.service");
 
+// Función para validar que los campos se encuentran antes de insertarlos a la DB
 function validarParametros(parametros) {
   const CAMPOS_OBLIGATORIOS_FACTURA = [
     "fecha",
@@ -45,7 +46,7 @@ function validarParametros(parametros) {
     }
   }
 
-  // Verifica el formato de los productos y si se encuentran todos sus campos obligatorios
+  // Verifica el formato de los productos
   if (
     !Array.isArray(parametros.productos) ||
     parametros.productos.length === 0
@@ -56,6 +57,7 @@ function validarParametros(parametros) {
     };
   }
 
+  // Verifica si se encuentran todos sus campos obligatorios
   for (let producto of parametros.productos) {
     for (let campo of CAMPOS_OBLIGATORIOS_PRODUCTO) {
       if (!(campo in producto)) {
