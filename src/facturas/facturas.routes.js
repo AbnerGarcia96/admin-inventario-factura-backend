@@ -1,11 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const facturasController = require("./facturas.controller");
+import express from "express";
+import facturasController from "./facturas.controller.js";
 
-router.get("/", facturasController.obtenerFacturas);
-router.get("/:id", facturasController.obtenerDetallesFactura);
-router.post("/", facturasController.crearFactura);
-router.delete("/:id", facturasController.eliminarFactura);
-router.patch("/:id", facturasController.editarFactura);
+const rutasFacturas = express.Router();
+rutasFacturas.get("/", facturasController.obtenerProductos);
+rutasFacturas.get("/:id", facturasController.obtenerDetalleProducto);
+rutasFacturas.post("/", facturasController.agregarProducto);
+rutasFacturas.patch("/:id", facturasController.editarProducto);
 
-module.exports = router;
+export default rutasFacturas;
