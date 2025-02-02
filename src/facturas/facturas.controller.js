@@ -14,19 +14,72 @@ function validarParametros(parametros) {
   }
 }
 
-async function obtenerFacturas(req, res) {}
+async function obtenerFacturas(req, res) {
+  try {
+    const respuesta = await facturasService.obtenerFacturas();
+    res.status(respuesta.$metadata.httpStatusCode).json(respuesta.Items);
+  } catch (error) {
+    console.error(`[FACTURAS.CONTROLLER] ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+}
 
-async function obtenerDetalleFactura(req, res) {}
+async function obtenerDetalleFactura(req, res) {
+  try {
+    const idFactura = req.params.id;
+    const respuesta = await facturasService.obtenerDetalleFactura(idFactura);
+    if (respuesta.Item) {
+      res.status(respuesta.$metadata.httpStatusCode).json(respuesta.Item);
+    } else {
+      res.status(404).json(null);
+    }
+  } catch (error) {
+    console.error(`[FACTURAS.CONTROLLER] ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+}
 
-async function agregarFactura(req, res) {}
+async function agregarFactura(req, res) {
+  try {
+    const factura = {
+      ...JSON.parse(req.query.factura),
+      idFactura: uuidv4(),
+      creado: new Date().toISOString(),
+      modificado: null,
+      eliminado: false,
+    };
 
-async function editarFactura(req, res) {}
+    validarParametros(factura);
 
-const productosController = {
+    await facturasService.agregarFactura(factura);
+
+    res.status(201).json(factura);
+  } catch (error) {
+    console.error(`[FACTURAS.CONTROLLER] ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function editarFactura(req, res) {
+  try {
+    const { idFactura, ...camposActualizados } = JSON.parse(req.query.factura);
+
+    camposActualizados.modificado = new Date().toISOString();
+
+    await facturasService.editarFactura(idFactura, camposActualizados);
+
+    res.status(200).json({ idFactura, ...camposActualizados });
+  } catch (error) {
+    console.error(`[FACTURAS.CONTROLLER] ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+const facturasController = {
   obtenerFacturas,
   obtenerDetalleFactura,
   agregarFactura,
   editarFactura,
 };
 
-export default productosController;
+export default facturasController;

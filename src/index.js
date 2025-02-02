@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-// import rutasFacturas from "./facturas/facturas.routes";
+import rutasFacturas from "./facturas/facturas.routes.js";
 import rutasProductos from "./productos/productos.routes.js";
 
 // Crea la instancia de Express para manejar las rutas del API
@@ -17,7 +17,7 @@ app.use(express.json()); // Parse JSON request bodies
 //connectDB();
 
 // Rutas base
-// app.use("/facturas", rutasFacturas);
+app.use("/facturas", rutasFacturas);
 app.use("/productos", rutasProductos);
 
 // Inicialización del servidor

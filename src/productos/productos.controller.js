@@ -8,6 +8,8 @@ function validarParametros(parametros) {
     "descripcion",
     "marca",
     "precio",
+    "creado",
+    "modificado",
   ];
 
   for (let campo of CAMPOS_OBLIGATORIOS) {
@@ -50,11 +52,14 @@ async function agregarProducto(req, res) {
     const producto = {
       ...JSON.parse(req.query.producto),
       idProducto: uuidv4(),
+      creado: new Date().toISOString(),
+      modificado: null,
+      eliminado: false,
     };
 
     validarParametros(producto);
 
-    productosService.agregarProducto(producto);
+    await productosService.agregarProducto(producto);
 
     res.status(201).json(producto);
   } catch (error) {
@@ -69,12 +74,11 @@ async function editarProducto(req, res) {
       req.query.producto
     );
 
-    const respuesta = productosService.editarProducto(
-      idProducto,
-      camposActualizados
-    );
+    camposActualizados.modificado = new Date().toISOString();
 
-    res.status(200).json(respuesta);
+    await productosService.editarProducto(idProducto, camposActualizados);
+
+    res.status(200).json({ idProducto, ...camposActualizados });
   } catch (error) {
     console.error(`[PRODUCTOS.CONTROLLER] ${error.message}`);
     res.status(500).json({ message: error.message });

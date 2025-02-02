@@ -4,6 +4,7 @@ import {
   GetCommand,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
+import utils from "../utils/utils.js";
 import clienteDynamoDB from "../config/db.js";
 
 const NOMBRE_TABLA = "productos";
@@ -53,25 +54,11 @@ async function agregarProducto(producto) {
 
 async function editarProducto(idProducto, camposActualizados) {
   try {
-    const expresionActualizar = Object.keys(camposActualizados)
-      .map((key, index) => `#attr${index} = :val${index}`)
-      .join(", ");
-
-    const expresionNombresAtributo = Object.keys(camposActualizados).reduce(
-      (acc, key, index) => {
-        acc[`#attr${index}`] = key;
-        return acc;
-      },
-      {}
-    );
-
-    const expresionValoresAtributo = Object.keys(camposActualizados).reduce(
-      (acc, key, index) => {
-        acc[`:val${index}`] = camposActualizados[key];
-        return acc;
-      },
-      {}
-    );
+    const [
+      expresionActualizar,
+      expresionNombresAtributo,
+      expresionValoresAtributo,
+    ] = utils.obtenerExpresionesAWS(camposActualizados);
 
     const comando = new UpdateCommand({
       TableName: NOMBRE_TABLA,
@@ -83,10 +70,8 @@ async function editarProducto(idProducto, camposActualizados) {
     });
 
     await clienteDynamoDB.send(comando);
-
-    return response;
   } catch (error) {
-    console.error(`[PRODUCTOS.CONTROLLER] ${error.message}`);
+    console.error(`[PRODUCTOS.SERVICE] ${error.message}`);
     throw error;
   }
 }
