@@ -1,3 +1,6 @@
+import "dotenv/config";
+import jwt from "jsonwebtoken";
+
 function obtenerExpresionesAWS(camposActualizados) {
   const expresionActualizar = Object.keys(camposActualizados)
     .map((key, index) => `#attr${index} = :val${index}`)
@@ -26,8 +29,26 @@ function obtenerExpresionesAWS(camposActualizados) {
   ];
 }
 
+function generarTokenAutenticacion(usuario) {
+  const token = jwt.sign(usuario, process.env.JWT_SECRET_KEY, {
+    expiresIn: "1h",
+  });
+  return token;
+}
+
+function verificarTokenAutenticacion(token) {
+  try {
+    const data = jwt.verify(token, SECRET_KEY);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 const utils = {
   obtenerExpresionesAWS,
+  generarTokenAutenticacion,
+  verificarTokenAutenticacion,
 };
 
 export default utils;
