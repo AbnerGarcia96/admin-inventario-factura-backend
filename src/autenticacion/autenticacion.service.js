@@ -12,6 +12,7 @@ const NOMBRE_TABLA = "usuarios";
 
 /*
 TODO: Implementar un algoritmo de hash dedicado para contraseñas, como ARGON2 o bcrypt (este ultimo se puede usar en JWT)
+      Utilizar el método de utils.obtenerExpresionesAWS
 Para pruebas
     Correo: prueba@gmail.com
     Contraseña: SHA256("asd.123") -> 93e193d5f8ec7be31b936589dcb0f2afd4decb21f6f471fb33a6c35f3406a931

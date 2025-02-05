@@ -4,6 +4,7 @@ import cors from "cors";
 import rutasFacturas from "./facturas/facturas.routes.js";
 import rutasProductos from "./productos/productos.routes.js";
 import rutasAutenticacion from "./autenticacion/autenticacion.routes.js";
+import rutasSucursales from "./sucursales/sucursales.routes.js";
 
 // Crea la instancia de Express para manejar las rutas del API
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use("/facturas", rutasFacturas);
 app.use("/productos", rutasProductos);
 app.use("/autenticacion", rutasAutenticacion);
+app.use("/sucursales", rutasSucursales);
 
 // Inicialización del servidor
 app.listen(PORT, () => {
