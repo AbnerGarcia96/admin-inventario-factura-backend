@@ -30,8 +30,9 @@ function obtenerExpresionesAWS(camposActualizados) {
 }
 
 function generarTokenAutenticacion(usuario) {
-  const token = jwt.sign(usuario, process.env.JWT_SECRET_KEY, {
-    expiresIn: "1h",
+  const dataJWT = {idUsuario: usuario.idUsuario, roles: usuario.roles}
+  const token = jwt.sign(dataJWT, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.EXPIRACION_JWT_TOKEN,
   });
   return token;
 }
