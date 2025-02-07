@@ -19,6 +19,7 @@ async function login(req, res) {
       const usuario = {
         nombre: respuesta.Items[0].nombre,
         apellido: respuesta.Items[0].apellido,
+        roles: respuesta.Items[0].roles,
         token: utils.generarTokenAutenticacion(respuesta.Items[0]),
       };
 
